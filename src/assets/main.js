@@ -1,8 +1,10 @@
-const url = 'https://youtube-v31.p.rapidapi.com/search?channelId=UCsRM0YB_dabtEPGPTKo-gcw&part=snippet%2Cid&order=date&maxResults=10';
+const API = 'https://youtube-v31.p.rapidapi.com/search?channelId=UCsRM0YB_dabtEPGPTKo-gcw&part=snippet%2Cid&order=date&maxResults=10';
+
+const content = null || document.getElementById('content');
+
 const options = {
 	method: 'GET',
 	headers: {
-		'content-type': 'application/octet-stream',
 		'X-RapidAPI-Key': '4ee7398e8cmsh428dc41f8a80d1cp1b5555jsn80a01942e0dd',
 		'X-RapidAPI-Host': 'youtube-v31.p.rapidapi.com'
 	}
@@ -14,13 +16,26 @@ async function fetchData(urlApi){
 }
 (async () => {
     try {
-    	const videos = await fetch(url);
+    	const videos = await fetchData(API);
     	let view = `
-        
-        
-        `;
+        ${videos.items.map(video => `
+        <div class="group relative">
+          <div
+            class="w-full bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:aspect-none">
+            <img src="${video.snippet.thumbnails.high.url}" alt="${video.snippet.description}" class="w-full">
+          </div>
+          <div class="mt-4 flex justify-between">
+            <h3 class="text-sm text-gray-700">
+              <span aria-hidden="true" class="absolute inset-0"></span>
+              ${video.snippet.title}
+            </h3>
+          </div>
+        </div>
+      `).slice(0,4).join('')}`;
+      content.innerHTML = view; 
+
     } catch (error) {
-    	console.error(error);
+    	 console.log(error);
     }
 })();
 
